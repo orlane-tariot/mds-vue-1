@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Test-API</title>
+	<style>
+		#demo {
+			font-family: 'Helvetica', Arial, sans-serif;
+		}
+		a {
+			text-decoration: none;
+			color: #f66;
+		}
+		li {
+			line-height: 1.5em;
+			margin-bottom: 20px;
+		}
+		.author, .date {
+			font-weight: bold;
+		}
+		.bleu {
+        background-color: blue;
+    }
+		
+	</style>
+</head>
+<body>
+	<div id="demo">
+		<div v-if="parkings.length > 0" v-for= "parking in parkings" :class= "bleu">
+			{{parking.fields.grp_nom}}
+			{{parking.fields.grp_disponible}}
+		</div>
+	</div>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		const apiURL = 'https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_parkings-publics-nantes-disponibilites&q=&facet=grp_nom&facet=grp_statut'
+
+		const demo = new Vue({
+			el: '#demo',
+			data: {
+				parkings : []
+			},
+			created: function () {
+				this.fetchData()
+			},
+			methods: {
+				fetchData: async function () {
+					try {
+					  	const response = await axios.get(apiURL)
+						console.log(response.data.records)
+						this.parkings= response.data.records;
+						
+						
+					} catch (error) {
+						console.log(error);
+					}
+				}
+		  	}
+		})
+	</script>
+</body>
+</html>
